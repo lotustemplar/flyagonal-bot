@@ -25,7 +25,7 @@ trades = {}
 CPI_2026 = ["2026-01-14","2026-02-12","2026-03-11","2026-04-10","2026-05-13","2026-06-10","2026-07-14","2026-08-12","2026-09-11","2026-10-13","2026-11-12","2026-12-10"]
 
 def send_telegram(msg, pm="HTML"):
-    if not TELEGAM_BOT_TOKEN or not TELEGRAM_CHAT_ID: return False
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID: return False
     try:
         http_req.post(f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage", json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": pm}, timeout=10)
         return True
@@ -160,7 +160,7 @@ def telegram_webhook():
     if str(d.get("message", {}).get("chat", {}).get("id", "")) != TELEGRAM_CHAT_ID: return jsonify({"ok": True})
     if txt == "/status":
         if not trades: send_telegram("No active trades.")
-        for t in trades.values(): send_telegram(f"\ud83d\udcca {t['trade_id']}\nStatus: {t['status']}\ P/L: {t['current_pnl_pct']:+.1f}%\nHWM: {t['high_water_mark']:.1f}%")
+        for t in trades.values(): send_telegram(f"\ud83d\udcca {t['trade_id']}\nStatus: {t['status']}\nP/L: {t['current_pnl_pct']:+.1f}%\nHWM: {t['high_water_mark']:.1f}%")
     elif txt == "/help": send_telegram("<b>Commands</b>\n/status - Show trades\n/help - This")
     return jsonify({"ok": True})
 
