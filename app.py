@@ -16,7 +16,7 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 API_SECRET = os.environ.get("API_SECRET_KEY", "flyagonal-default-key")
 
 app = Flask(__name__)
-CORS(app, origins=["https://lotustemplar.github.io", "http://localhost:3000"])
+CORS(app, origins="*")
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
