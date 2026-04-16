@@ -20,6 +20,21 @@ CORS(app, origins="*")
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+# Force JSON responses for all errors so Chrome extension never gets HTML
+@app.errorhandler(404)
+def _404(e): return jsonify(ok=False, error="Not found"), 404
+
+@app.errorhandler(405)
+def _405(e): return jsonify(ok=False, error="Method not allowed"), 405
+
+@app.errorhandler(500)
+def _500(e): return jsonify(ok=False, error="Internal server error"), 500
+
+@app.errorhandler(Exception)
+def _exc(e):
+    log.exception("Unhandled exception")
+    return jsonify(ok=False, error=str(e)), 500
+
 schwab_tokens = {"access_token": None, "refresh_token": None, "expires_at": 0}
 trades = {}
 CPI_2026 = ["2026-01-14","2026-02-12","2026-03-11","2026-04-10","2026-05-13","2026-06-10","2026-07-14","2026-08-12","2026-09-11","2026-10-13","2026-11-12","2026-12-10"]
